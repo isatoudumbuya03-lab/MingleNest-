@@ -1,4 +1,4 @@
-name: Build Android Bundle (.aab)
+9name: Build Android Bundle (.aab)
 
 on:
   workflow_dispatch:
@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
-          java-version: '17'
+          java-version: '21'
 
       - name: Install dependencies & Build
         run: |
