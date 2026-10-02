@@ -6,6 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -19,23 +20,34 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
-          java-version: '21'
+          java-version: '17'
 
-      - name: Install dependencies & Build
-        run: |
-          npm install
-          npm run build
-          npx cap add android
-          npx cap copy
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Build Android Bundle (.aab)
+      - name: Build web app
+        run: npm run build
+
+      - name: Sync Capacitor Android
+        run: npx cap sync android
+
+      - name: Build Unsigned AAB
         run: |
           cd android
-          chmod +x gradlew
           ./gradlew bundleRelease
 
-      - name: Upload .aab artifact
+      - name: Sign AAB
+        uses: r0adkll/sign-android-release@v1
+        id: sign_app
+        with:
+          releaseDirectory: android/app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          alias: ${{ secrets.KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Upload Signed AAB
         uses: actions/upload-artifact@v4
         with:
-          name: app-release-aab
-          path: android/app/build/outputs/bundle/release/app-release.aab
+          name: app-release-signed
+          path: ${{ steps.sign_app.outputs.signedReleaseFile }}
