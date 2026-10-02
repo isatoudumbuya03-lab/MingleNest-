@@ -1,4 +1,4 @@
-9name: Build Android Bundle (.aab)
+name: Build Android Bundle (.aab)
 
 on:
   workflow_dispatch:
