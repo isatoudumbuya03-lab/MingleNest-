@@ -34,7 +34,8 @@ jobs:
       - name: Build Unsigned AAB
         run: |
           cd android
-          ./gradlew bundleRelease
+          ./gradlew bundleRelease -PversionCode=2 -PversionName="1.0.1"
+
 
       - name: Sign AAB
         uses: r0adkll/sign-android-release@v1
