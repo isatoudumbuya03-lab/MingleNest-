@@ -4,7 +4,7 @@ import type { CapacitorConfig } from '@capacitor/cli'
 // No screen-capture blocking (FLAG_SECURE) is set anywhere, so screenshots,
 // screen recording and copy/paste behave normally on the device.
 const config: CapacitorConfig = {
-  appId: 'com.minglenest.app',
+  appId: 'com.minglenest.social',
   appName: 'MingleNest',
   webDir: 'dist',
   android: {
